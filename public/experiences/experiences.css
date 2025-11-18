@@ -1,0 +1,6 @@
+@import url("../templates/templates.css");
+
+/* Experience-level wrapper to ensure the full cascade (framework → tokens → elements → blocks → templates) is loaded. */
+.bds-experience-page {
+  background: var(--bds-color-bg);
+}
