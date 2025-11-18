@@ -94,7 +94,14 @@ export default {
         component.path === path || (component.slug === "index" && path === "/"),
     );
     if (route) {
-      return serveComponent({ route, request, env, components: COMPONENTS });
+      const response = await serveComponent({
+        route,
+        request,
+        env,
+        components: COMPONENTS,
+      });
+
+      if (response) return response;
     }
 
     // Fallback: serve an index page even if the manifest is unavailable
@@ -123,7 +130,11 @@ export default {
 };
 
 function renderComponentList(components) {
-  if (!components.length) return "";
+  if (!components.length) {
+    return `<div class="alert alert-info" role="status">
+      No components found yet. Add HTML fragments under <code>public/components/</code> to see them listed here.
+    </div>`;
+  }
 
   const links = components
     .sort((a, b) => a.title.localeCompare(b.title))
@@ -162,7 +173,15 @@ async function serveComponent({ route, request, env, components }) {
   const assetResponse = await env.ASSETS.fetch(assetRequest);
 
   if (!assetResponse.ok) {
-    return null;
+    return new Response(
+      `Component not found. Unable to load ${route.file}. Make sure it exists in public/components and rerun wrangler dev.`,
+      {
+        status: 404,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      },
+    );
   }
 
   let fragment = await assetResponse.text();
