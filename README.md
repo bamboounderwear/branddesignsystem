@@ -8,6 +8,7 @@ starting from actual **experiences** and reverse-engineering down to tokens.
 ## Structure
 
 - `tokens/` – Design tokens as CSS custom properties.
+- `frameworks/` – Third-party CSS frameworks and libraries shared across layers.
 - `elements/` – Reusable micro pieces (logo, headings, buttons, basic text).
 - `blocks/` – Composed content blocks (hero, stats, feature, email header/footer).
 - `templates/` – Six templates total:
