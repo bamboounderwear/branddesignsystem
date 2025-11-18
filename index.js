@@ -1,9 +1,27 @@
-import manifestData from '__STATIC_CONTENT_MANIFEST' assert { type: 'json' };
-
 function toManifestArray(data) {
   if (!data) return [];
   const parsed = typeof data === 'string' ? JSON.parse(data) : data;
   return Array.isArray(parsed) ? parsed : Object.keys(parsed);
+}
+
+async function listAssetPaths(assets) {
+  try {
+    const result = await assets.list();
+    if (!result) return [];
+
+    if (Array.isArray(result.objects)) {
+      return result.objects.map((entry) => entry.key).filter(Boolean);
+    }
+
+    if (Array.isArray(result.keys)) {
+      return result.keys.map((entry) => entry.name || entry).filter(Boolean);
+    }
+
+    return toManifestArray(result);
+  } catch (error) {
+    console.error('Failed to list assets', error);
+    return [];
+  }
 }
 
 function buildTree(paths) {
@@ -39,14 +57,14 @@ function renderList(node, basePath = '') {
     .join('');
 }
 
-const manifestPaths = toManifestArray(manifestData);
-const tree = buildTree(manifestPaths);
-
 export default {
   async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
 
     if (pathname === '/') {
+      const manifestPaths = await listAssetPaths(env.ASSETS);
+      const tree = buildTree(manifestPaths);
+      const hasEntries = manifestPaths.length > 0;
       const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +84,7 @@ export default {
 <body>
   <h1>Brand Design System</h1>
   <p>Browse the available folders and files.</p>
-  <ul>${renderList(tree)}</ul>
+  ${hasEntries ? `<ul>${renderList(tree)}</ul>` : '<p><em>No assets available.</em></p>'}
 </body>
 </html>`;
 
