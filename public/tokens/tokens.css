@@ -1,3 +1,5 @@
+@import url("../assets/framework.css");
+
 :root {
   /* Color tokens */
   --bds-color-primary: #2b5cff;
@@ -41,4 +43,22 @@
   --bds-duration-fast: 120ms;
   --bds-duration-normal: 200ms;
   --bds-duration-slow: 320ms;
+}
+
+/* Map Brand Design System tokens onto the Chota framework defaults */
+:root {
+  --bg-color: var(--bds-color-bg);
+  --bg-secondary-color: var(--bds-color-surface);
+  --color-primary: var(--bds-color-primary);
+  --color-lightGrey: var(--bds-color-border-subtle);
+  --color-grey: var(--bds-color-text-muted);
+  --color-darkGrey: var(--bds-color-text);
+  --color-error: var(--bds-color-accent);
+  --color-success: var(--bds-color-primary);
+  --grid-maxWidth: 120rem;
+  --grid-gutter: 2rem;
+  --font-size: 16px;
+  --font-color: var(--bds-color-text);
+  --font-family-sans: var(--bds-font-sans);
+  --font-family-mono: var(--bds-font-sans);
 }
