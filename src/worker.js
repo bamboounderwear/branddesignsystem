@@ -4,20 +4,52 @@
 // with a shared <head> and <body>, but does NOT enforce any navbar or
 // layout container. Each component controls its own layout.
 
-const ROUTES = {
-  "/": {
-    file: "/components/index.html",
-    title: "BDS Bootstrap Tokens – Overview",
-  },
-  "/slide-typography": {
-    file: "/components/slide-typography.html",
-    title: "BDS – Typography Slide Example",
-  },
-  "/email-campaign": {
-    file: "/components/email-campaign.html",
-    title: "BDS – Email Campaign Layout Example",
-  },
-};
+let componentCache;
+
+function discoverComponents(env) {
+  if (componentCache) return componentCache;
+
+  const manifest = readManifest(env);
+  const components = Object.keys(manifest)
+    .filter(
+      (key) =>
+        key.startsWith("components/") &&
+        key.endsWith(".html") &&
+        !key.includes("/."),
+    )
+    .map((file) => {
+      const slug = file.replace(/^components\//, "").replace(/\.html$/, "");
+      return {
+        slug,
+        path: slug === "index" ? "/" : `/${slug}`,
+        title: slug === "index" ? "BDS Bootstrap Tokens – Overview" : slugToTitle(slug),
+        file: `/${file}`,
+      };
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  componentCache = components;
+  return components;
+}
+
+function readManifest(env) {
+  const manifestJSON = env?.__STATIC_CONTENT_MANIFEST || globalThis.__STATIC_CONTENT_MANIFEST;
+  if (!manifestJSON) return {};
+
+  try {
+    return JSON.parse(manifestJSON);
+  } catch (error) {
+    console.warn("Failed to parse static content manifest", error);
+    return {};
+  }
+}
+
+function slugToTitle(slug) {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
 
 function renderHtml({ title, body }) {
   return `<!doctype html>
@@ -49,31 +81,106 @@ ${body}
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const path = url.pathname;
+    const path =
+      url.pathname.endsWith("/") && url.pathname !== "/"
+        ? url.pathname.slice(0, -1)
+        : url.pathname;
+
+    const COMPONENTS = discoverComponents(env);
 
     // Route HTML pages
-    const route = ROUTES[path];
+    const route = COMPONENTS.find(
+      (component) =>
+        component.path === path || (component.slug === "index" && path === "/"),
+    );
     if (route) {
-      // Fetch the component HTML fragment from static assets
-      const assetUrl = new URL(route.file, request.url);
-      const assetRequest = new Request(assetUrl.toString(), request);
-      const assetResponse = await env.ASSETS.fetch(assetRequest);
+      return serveComponent({ route, request, env, components: COMPONENTS });
+    }
 
-      if (!assetResponse.ok) {
-        return new Response("Component not found", { status: 404 });
-      }
+    // Fallback: serve an index page even if the manifest is unavailable
+    if (!hasFileExtension(path)) {
+      const slug = path === "/" ? "index" : path.replace(/^\//, "");
+      const fallbackRoute = {
+        slug,
+        path,
+        title: slug === "index" ? "BDS Bootstrap Tokens – Overview" : slugToTitle(slug),
+        file: `/components/${slug}.html`,
+      };
 
-      const fragment = await assetResponse.text();
-      const html = renderHtml({ title: route.title, body: fragment });
-      return new Response(html, {
-        status: 200,
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-        },
+      const response = await serveComponent({
+        route: fallbackRoute,
+        request,
+        env,
+        components: COMPONENTS,
       });
+
+      if (response) return response;
     }
 
     // Everything else (CSS, images, etc.) is served directly from static assets
     return env.ASSETS.fetch(request);
   },
 };
+
+function renderComponentList(components) {
+  if (!components.length) return "";
+
+  const links = components
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(
+      (component) => `
+      <li class="list-group-item d-flex align-items-center justify-content-between">
+        <div>
+          <div class="fw-semibold">${component.title}</div>
+          <div class="text-muted small">${component.path}</div>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" href="${component.path}">View</a>
+      </li>`,
+    )
+    .join("");
+
+  return `
+    <div class="card">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">${links}</ul>
+      </div>
+    </div>`;
+}
+
+function injectComponentList(fragment, listHtml) {
+  const marker = "<!-- COMPONENT_LIST -->";
+  if (fragment.includes(marker)) {
+    return fragment.replace(marker, listHtml);
+  }
+  return `${fragment}\n${listHtml}`;
+}
+
+async function serveComponent({ route, request, env, components }) {
+  // Fetch the component HTML fragment from static assets
+  const assetUrl = new URL(route.file, request.url);
+  const assetRequest = new Request(assetUrl.toString(), request);
+  const assetResponse = await env.ASSETS.fetch(assetRequest);
+
+  if (!assetResponse.ok) {
+    return null;
+  }
+
+  let fragment = await assetResponse.text();
+
+  if (route.slug === "index") {
+    const componentList = components.filter((component) => component.slug !== "index");
+    fragment = injectComponentList(fragment, renderComponentList(componentList));
+  }
+
+  const html = renderHtml({ title: route.title, body: fragment });
+  return new Response(html, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
+}
+
+function hasFileExtension(path) {
+  return /\.[a-zA-Z0-9]+$/.test(path);
+}
