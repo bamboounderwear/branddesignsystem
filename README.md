@@ -25,6 +25,17 @@ Each layer only uses the layer below it:
 - Templates use blocks.
 - Experiences use templates.
 
+## Bundled CSS
+
+- Run `npm run build:css` (or rely on the `postinstall` hook) to generate
+  `public/bds.css`, which concatenates tokens → elements → blocks → templates
+  and resolves their `@import` statements.
+- Reference the design system with a single import in HTML:
+  `<link rel="stylesheet" href="/bds.css" />`.
+- Designers can update `public/tokens/tokens.css` for token tweaks or edit the
+  generated `public/bds.css` directly for quick bundled overrides. Optional
+  experience-specific tweaks can live in `public/experiences/experiences.css`.
+
 ## Cloudflare Workers deployment
 
 This repository is configured as a Cloudflare Workers project with static asset

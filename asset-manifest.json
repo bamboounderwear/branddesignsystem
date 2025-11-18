@@ -1,5 +1,6 @@
 [
   "assets/logo.svg",
+  "bds.css",
   "blocks/blocks.css",
   "blocks/blocks.html",
   "elements/elements.css",
@@ -7,6 +8,7 @@
   "experiences/email-campaign/email-01-launch.html",
   "experiences/email-campaign/email-02-how-to-use.html",
   "experiences/email-campaign/email-03-next-steps.html",
+  "experiences/experiences.css",
   "experiences/slide-deck/slide-01-overview.html",
   "experiences/slide-deck/slide-02-impact.html",
   "experiences/slide-deck/slide-03-pillars.html",
