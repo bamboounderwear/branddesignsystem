@@ -1,3 +1,5 @@
+import embeddedManifest from './asset-manifest.json' assert { type: 'json' };
+
 function toManifestArray(data) {
   if (!data) return [];
   const parsed = typeof data === 'string' ? JSON.parse(data) : data;
@@ -37,6 +39,7 @@ async function listAssetPaths(assets, env) {
     env?.ASSETS_MANIFEST,
     env?.__STATIC_CONTENT_MANIFEST,
     globalThis.__STATIC_CONTENT_MANIFEST,
+    embeddedManifest,
   ];
 
   for (const manifest of manifestCandidates) {
