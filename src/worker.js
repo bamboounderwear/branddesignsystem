@@ -4,14 +4,13 @@
 // with a shared <head> and <body>, but does NOT enforce any navbar or
 // layout container. Each component controls its own layout.
 
-import manifestJSON from "__STATIC_CONTENT_MANIFEST";
+let componentCache;
 
-const manifest = JSON.parse(manifestJSON);
+function discoverComponents(env) {
+  if (componentCache) return componentCache;
 
-const COMPONENTS = discoverComponents();
-
-function discoverComponents() {
-  return Object.keys(manifest)
+  const manifest = readManifest(env);
+  const components = Object.keys(manifest)
     .filter(
       (key) =>
         key.startsWith("components/") &&
@@ -28,6 +27,21 @@ function discoverComponents() {
       };
     })
     .sort((a, b) => a.title.localeCompare(b.title));
+
+  componentCache = components;
+  return components;
+}
+
+function readManifest(env) {
+  const manifestJSON = env?.__STATIC_CONTENT_MANIFEST || globalThis.__STATIC_CONTENT_MANIFEST;
+  if (!manifestJSON) return {};
+
+  try {
+    return JSON.parse(manifestJSON);
+  } catch (error) {
+    console.warn("Failed to parse static content manifest", error);
+    return {};
+  }
 }
 
 function slugToTitle(slug) {
@@ -71,6 +85,8 @@ export default {
       url.pathname.endsWith("/") && url.pathname !== "/"
         ? url.pathname.slice(0, -1)
         : url.pathname;
+
+    const COMPONENTS = discoverComponents(env);
 
     // Route HTML pages
     const route = COMPONENTS.find(
