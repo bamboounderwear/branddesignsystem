@@ -94,29 +94,27 @@ export default {
         component.path === path || (component.slug === "index" && path === "/"),
     );
     if (route) {
-      // Fetch the component HTML fragment from static assets
-      const assetUrl = new URL(route.file, request.url);
-      const assetRequest = new Request(assetUrl.toString(), request);
-      const assetResponse = await env.ASSETS.fetch(assetRequest);
+      return serveComponent({ route, request, env, components: COMPONENTS });
+    }
 
-      if (!assetResponse.ok) {
-        return new Response("Component not found", { status: 404 });
-      }
+    // Fallback: serve an index page even if the manifest is unavailable
+    if (!hasFileExtension(path)) {
+      const slug = path === "/" ? "index" : path.replace(/^\//, "");
+      const fallbackRoute = {
+        slug,
+        path,
+        title: slug === "index" ? "BDS Bootstrap Tokens – Overview" : slugToTitle(slug),
+        file: `/components/${slug}.html`,
+      };
 
-      let fragment = await assetResponse.text();
-
-      if (route.slug === "index") {
-        const componentList = COMPONENTS.filter((component) => component.slug !== "index");
-        fragment = injectComponentList(fragment, renderComponentList(componentList));
-      }
-
-      const html = renderHtml({ title: route.title, body: fragment });
-      return new Response(html, {
-        status: 200,
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-        },
+      const response = await serveComponent({
+        route: fallbackRoute,
+        request,
+        env,
+        components: COMPONENTS,
       });
+
+      if (response) return response;
     }
 
     // Everything else (CSS, images, etc.) is served directly from static assets
@@ -155,4 +153,34 @@ function injectComponentList(fragment, listHtml) {
     return fragment.replace(marker, listHtml);
   }
   return `${fragment}\n${listHtml}`;
+}
+
+async function serveComponent({ route, request, env, components }) {
+  // Fetch the component HTML fragment from static assets
+  const assetUrl = new URL(route.file, request.url);
+  const assetRequest = new Request(assetUrl.toString(), request);
+  const assetResponse = await env.ASSETS.fetch(assetRequest);
+
+  if (!assetResponse.ok) {
+    return null;
+  }
+
+  let fragment = await assetResponse.text();
+
+  if (route.slug === "index") {
+    const componentList = components.filter((component) => component.slug !== "index");
+    fragment = injectComponentList(fragment, renderComponentList(componentList));
+  }
+
+  const html = renderHtml({ title: route.title, body: fragment });
+  return new Response(html, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
+}
+
+function hasFileExtension(path) {
+  return /\.[a-zA-Z0-9]+$/.test(path);
 }
