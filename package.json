@@ -1,9 +1,0 @@
-{
-  "name": "branddesignsystem",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "build:css": "node scripts/build-bds-css.js",
-    "postinstall": "npm run build:css"
-  }
-}

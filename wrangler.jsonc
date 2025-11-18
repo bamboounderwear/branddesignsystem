@@ -1,12 +1,10 @@
+// wrangler.jsonc
 {
-  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
-  "name": "branddesignsystem",
-  "main": "index.js",
-  "compatibility_date": "2024-10-04",
+  "name": "bds-bootstrap-workers",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-01-15",
   "assets": {
     "binding": "ASSETS",
-    "directory": "./public",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "directory": "./public"
   }
 }

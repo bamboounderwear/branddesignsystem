@@ -1,55 +1,57 @@
-# Brand Design System (BDS)
- 
-Sequence: **Tokens → Elements → Blocks → Templates → Experiences**
+# BDS Bootstrap Tokens – Cloudflare Workers Example
 
-This repo shows a minimal, HTML-first implementation of the BDS model,
-starting from actual **experiences** and reverse-engineering down to tokens.
+This project shows how to:
+- Use **Bootstrap 5** for layout and components
+- Put all brand styling in **`brand-tokens.css`**
+- Let a **Cloudflare Worker** inject `<head>`, `<body>`, and a shared navbar
+  around HTML component fragments.
 
 ## Structure
 
-- `tokens/` – Design tokens as CSS custom properties.
-- `elements/` – Reusable micro pieces (logo, headings, buttons, basic text).
-- `blocks/` – Composed content blocks (hero, stats, feature, email header/footer).
-- `templates/` – Six templates total:
-  - 3 slide templates
-  - 3 email templates
-- `experiences/` – Two example experiences, each as sub-folders:
-  - `slide-deck/` – 3-slide deck using the slide templates
-  - `email-campaign/` – 3-email campaign using the email templates
-- `assets/` – Shared logo SVG placeholder.
+- `wrangler.jsonc` – Cloudflare Workers config.
+- `src/worker.js` – Module Worker that wraps fragments with the full HTML shell (head + body) but does NOT inject any navbar or layout container.
+- `public/brand-tokens.css` – Brand tokens + Bootstrap variable mapping.
+  - Non-coders only edit the `:root` BDS token values at the top.
+- `public/components/*.html` – Content-only HTML fragments (no `<html>`, `<head>`, `<body>`):
+  - `index.html`
+  - `slide-typography.html`
+  - `email-campaign.html`
 
-Each layer only uses the layer below it:
-- Tokens are only CSS variables.
-- Elements use tokens.
-- Blocks use elements.
-- Templates use blocks.
-- Experiences use templates.
+## How it works
 
-## Bundled CSS
+- When you hit `/`, `/slide-typography`, or `/email-campaign`:
+  - The Worker reads the matching fragment from `public/components/`.
+  - It wraps that fragment in a shared layout (doctype, head with Bootstrap CDN,
+    `brand-tokens.css`, navbar, `<main class="container my-5">...</main>`).
+- Requests for anything else (like `/brand-tokens.css`) are served directly
+  from the `public/` directory via the `ASSETS` binding.
 
-- Run `npm run build:css` (or rely on the `postinstall` hook) to generate
-  `public/bds.css`, which concatenates tokens → elements → blocks → templates
-  and resolves their `@import` statements.
-- Reference the design system with a single import in HTML:
-  `<link rel="stylesheet" href="/bds.css" />`.
-- Designers can update `public/tokens/tokens.css` for token tweaks or edit the
-  generated `public/bds.css` directly for quick bundled overrides. Optional
-  experience-specific tweaks can live in `public/experiences/experiences.css`.
+## Usage
 
-## Cloudflare Workers deployment
+```bash
+# Install wrangler if needed
+npm install -g wrangler
 
-This repository is configured as a Cloudflare Workers project with static asset
-binding. The `wrangler.jsonc` file binds all files in `public/` through the
-`ASSETS` binding and serves them via the root `index.js` worker entry.
+# Preview locally
+wrangler dev
 
-To develop locally or deploy:
+# Deploy to Cloudflare Workers
+wrangler publish
+```
 
-1. Install the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/get-started/).
-2. Run `wrangler dev` to preview locally.
-3. Run `wrangler deploy` to publish to Cloudflare Workers.
+To add a new page:
 
-## Optional build idea
+1. Create a new fragment in `public/components/your-page.html`
+   containing only the main content (no `<html>`, `<head>`, `<body>`).
+2. Add a route to `ROUTES` in `src/worker.js` pointing to that file.
+3. Redeploy with `wrangler publish`.
 
-Right now everything is static HTML. If you want, you can later add a small
-templating step (e.g. Nunjucks, Eleventy, or a simple script) that composes
-the experience pages by including the template HTML partials from `templates/`.
+To rebrand everything:
+
+- Edit the token values in `public/brand-tokens.css` under the `/* BDS TOKENS */` section.
+- All pages and layouts will inherit the new styling automatically.
+
+Note:
+- The Worker shell does not include any navbar or `.container` wrappers.
+- Each component fragment in `public/components/` is responsible for its own
+  Bootstrap structure (e.g. `container`, `row`, `col-*`, navbars if needed).

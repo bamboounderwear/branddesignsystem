@@ -1,0 +1,79 @@
+// src/worker.js
+//
+// Cloudflare Worker that wraps HTML fragments from /public/components
+// with a shared <head> and <body>, but does NOT enforce any navbar or
+// layout container. Each component controls its own layout.
+
+const ROUTES = {
+  "/": {
+    file: "/components/index.html",
+    title: "BDS Bootstrap Tokens – Overview",
+  },
+  "/slide-typography": {
+    file: "/components/slide-typography.html",
+    title: "BDS – Typography Slide Example",
+  },
+  "/email-campaign": {
+    file: "/components/email-campaign.html",
+    title: "BDS – Email Campaign Layout Example",
+  },
+};
+
+function renderHtml({ title, body }) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${title}</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="/brand-tokens.css" />
+</head>
+<body>
+${body}
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>`;
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    // Route HTML pages
+    const route = ROUTES[path];
+    if (route) {
+      // Fetch the component HTML fragment from static assets
+      const assetUrl = new URL(route.file, request.url);
+      const assetRequest = new Request(assetUrl.toString(), request);
+      const assetResponse = await env.ASSETS.fetch(assetRequest);
+
+      if (!assetResponse.ok) {
+        return new Response("Component not found", { status: 404 });
+      }
+
+      const fragment = await assetResponse.text();
+      const html = renderHtml({ title: route.title, body: fragment });
+      return new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+        },
+      });
+    }
+
+    // Everything else (CSS, images, etc.) is served directly from static assets
+    return env.ASSETS.fetch(request);
+  },
+};
