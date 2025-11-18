@@ -25,6 +25,18 @@ Each layer only uses the layer below it:
 - Templates use blocks.
 - Experiences use templates.
 
+## Cloudflare Workers deployment
+
+This repository is configured as a Cloudflare Workers project with static asset
+binding. The `wrangler.jsonc` file binds all files in `public/` through the
+`ASSETS` binding and serves them via the root `index.js` worker entry.
+
+To develop locally or deploy:
+
+1. Install the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/get-started/).
+2. Run `wrangler dev` to preview locally.
+3. Run `wrangler deploy` to publish to Cloudflare Workers.
+
 ## Optional build idea
 
 Right now everything is static HTML. If you want, you can later add a small
