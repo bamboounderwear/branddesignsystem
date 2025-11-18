@@ -43,8 +43,10 @@ To add a new page:
 
 1. Create a new fragment in `public/components/your-page.html`
    containing only the main content (no `<html>`, `<head>`, `<body>`).
-2. Add a route to `ROUTES` in `src/worker.js` pointing to that file.
-3. Redeploy with `wrangler publish`.
+2. Redeploy with `wrangler publish`.
+
+The index page automatically lists every component fragment it discovers in
+`public/components/`, so new pages show up as soon as they are deployed.
 
 To rebrand everything:
 
