@@ -4,20 +4,38 @@
 // with a shared <head> and <body>, but does NOT enforce any navbar or
 // layout container. Each component controls its own layout.
 
-const ROUTES = {
-  "/": {
-    file: "/components/index.html",
-    title: "BDS Bootstrap Tokens – Overview",
-  },
-  "/slide-typography": {
-    file: "/components/slide-typography.html",
-    title: "BDS – Typography Slide Example",
-  },
-  "/email-campaign": {
-    file: "/components/email-campaign.html",
-    title: "BDS – Email Campaign Layout Example",
-  },
-};
+import manifestJSON from "__STATIC_CONTENT_MANIFEST";
+
+const manifest = JSON.parse(manifestJSON);
+
+const COMPONENTS = discoverComponents();
+
+function discoverComponents() {
+  return Object.keys(manifest)
+    .filter(
+      (key) =>
+        key.startsWith("components/") &&
+        key.endsWith(".html") &&
+        !key.includes("/."),
+    )
+    .map((file) => {
+      const slug = file.replace(/^components\//, "").replace(/\.html$/, "");
+      return {
+        slug,
+        path: slug === "index" ? "/" : `/${slug}`,
+        title: slug === "index" ? "BDS Bootstrap Tokens – Overview" : slugToTitle(slug),
+        file: `/${file}`,
+      };
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
+}
+
+function slugToTitle(slug) {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
 
 function renderHtml({ title, body }) {
   return `<!doctype html>
@@ -49,10 +67,16 @@ ${body}
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const path = url.pathname;
+    const path =
+      url.pathname.endsWith("/") && url.pathname !== "/"
+        ? url.pathname.slice(0, -1)
+        : url.pathname;
 
     // Route HTML pages
-    const route = ROUTES[path];
+    const route = COMPONENTS.find(
+      (component) =>
+        component.path === path || (component.slug === "index" && path === "/"),
+    );
     if (route) {
       // Fetch the component HTML fragment from static assets
       const assetUrl = new URL(route.file, request.url);
@@ -63,7 +87,13 @@ export default {
         return new Response("Component not found", { status: 404 });
       }
 
-      const fragment = await assetResponse.text();
+      let fragment = await assetResponse.text();
+
+      if (route.slug === "index") {
+        const componentList = COMPONENTS.filter((component) => component.slug !== "index");
+        fragment = injectComponentList(fragment, renderComponentList(componentList));
+      }
+
       const html = renderHtml({ title: route.title, body: fragment });
       return new Response(html, {
         status: 200,
@@ -77,3 +107,36 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+function renderComponentList(components) {
+  if (!components.length) return "";
+
+  const links = components
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(
+      (component) => `
+      <li class="list-group-item d-flex align-items-center justify-content-between">
+        <div>
+          <div class="fw-semibold">${component.title}</div>
+          <div class="text-muted small">${component.path}</div>
+        </div>
+        <a class="btn btn-sm btn-outline-primary" href="${component.path}">View</a>
+      </li>`,
+    )
+    .join("");
+
+  return `
+    <div class="card">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">${links}</ul>
+      </div>
+    </div>`;
+}
+
+function injectComponentList(fragment, listHtml) {
+  const marker = "<!-- COMPONENT_LIST -->";
+  if (fragment.includes(marker)) {
+    return fragment.replace(marker, listHtml);
+  }
+  return `${fragment}\n${listHtml}`;
+}
