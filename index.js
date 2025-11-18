@@ -1,27 +1,52 @@
+import embeddedManifest from './asset-manifest.json' assert { type: 'json' };
+
 function toManifestArray(data) {
   if (!data) return [];
   const parsed = typeof data === 'string' ? JSON.parse(data) : data;
   return Array.isArray(parsed) ? parsed : Object.keys(parsed);
 }
 
-async function listAssetPaths(assets) {
+async function listAssetPaths(assets, env) {
+  const paths = new Set();
+
   try {
     const result = await assets.list();
-    if (!result) return [];
 
-    if (Array.isArray(result.objects)) {
-      return result.objects.map((entry) => entry.key).filter(Boolean);
+    if (result) {
+      if (Array.isArray(result.objects)) {
+        result.objects.forEach((entry) => {
+          if (entry?.key) paths.add(entry.key);
+        });
+      } else if (Array.isArray(result.keys)) {
+        result.keys.forEach((entry) => {
+          const name = entry?.name || entry;
+          if (name) paths.add(name);
+        });
+      } else {
+        toManifestArray(result).forEach((key) => paths.add(key));
+      }
+
+      if (paths.size > 0) {
+        return [...paths];
+      }
     }
-
-    if (Array.isArray(result.keys)) {
-      return result.keys.map((entry) => entry.name || entry).filter(Boolean);
-    }
-
-    return toManifestArray(result);
   } catch (error) {
     console.error('Failed to list assets', error);
-    return [];
   }
+
+  const manifestCandidates = [
+    assets?.manifest,
+    env?.ASSETS_MANIFEST,
+    env?.__STATIC_CONTENT_MANIFEST,
+    globalThis.__STATIC_CONTENT_MANIFEST,
+    embeddedManifest,
+  ];
+
+  for (const manifest of manifestCandidates) {
+    toManifestArray(manifest).forEach((key) => paths.add(key));
+  }
+
+  return [...paths];
 }
 
 function buildTree(paths) {
@@ -62,7 +87,7 @@ export default {
     const { pathname } = new URL(request.url);
 
     if (pathname === '/') {
-      const manifestPaths = await listAssetPaths(env.ASSETS);
+      const manifestPaths = await listAssetPaths(env.ASSETS, env);
       const tree = buildTree(manifestPaths);
       const hasEntries = manifestPaths.length > 0;
       const html = `<!DOCTYPE html>
