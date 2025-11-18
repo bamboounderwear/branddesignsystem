@@ -1,0 +1,115 @@
+@import url("../elements/elements.css");
+
+.bds-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.bds-block {
+  border-radius: var(--bds-radius-lg);
+  border: 1px solid var(--bds-color-border-subtle);
+  background: var(--bds-color-surface);
+  padding: var(--bds-space-5);
+  box-shadow: var(--bds-shadow-soft);
+  margin-bottom: var(--bds-space-5);
+}
+
+.bds-block-label {
+  font-size: var(--bds-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bds-color-text-muted);
+  margin-bottom: var(--bds-space-2);
+}
+
+/* Slide hero block */
+.bds-block-slide-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--bds-space-6);
+  align-items: center;
+}
+
+.bds-hero-tagline {
+  font-size: var(--bds-font-size-md);
+  color: var(--bds-color-text-muted);
+  margin-bottom: var(--bds-space-4);
+}
+
+.bds-hero-aside {
+  border-radius: var(--bds-radius-lg);
+  border: 1px dashed var(--bds-color-border-subtle);
+  padding: var(--bds-space-4);
+  font-size: var(--bds-font-size-sm);
+  color: var(--bds-color-text-muted);
+}
+
+/* Slide stats block */
+.bds-block-slide-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-space-4);
+}
+
+.bds-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bds-space-4);
+}
+
+.bds-stat {
+  flex: 1 1 160px;
+  min-width: 160px;
+}
+
+.bds-stat-value {
+  font-size: var(--bds-font-size-2xl);
+  font-weight: 700;
+  margin-bottom: var(--bds-space-1);
+}
+
+.bds-stat-label {
+  font-size: var(--bds-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--bds-color-text-muted);
+}
+
+/* Slide pillars block */
+.bds-block-slide-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--bds-space-4);
+}
+
+.bds-pillar {
+  border-radius: var(--bds-radius-md);
+  border: 1px solid var(--bds-color-border-subtle);
+  padding: var(--bds-space-4);
+}
+
+/* Email header block */
+.bds-block-email-header {
+  text-align: left;
+}
+
+/* Email feature block */
+.bds-block-email-feature-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bds-space-4);
+}
+
+.bds-feature-item {
+  border-radius: var(--bds-radius-md);
+  border: 1px solid var(--bds-color-border-subtle);
+  padding: var(--bds-space-4);
+}
+
+/* Email footer block */
+.bds-block-email-footer {
+  border-top: 1px solid var(--bds-color-border-subtle);
+  padding-top: var(--bds-space-3);
+  font-size: var(--bds-font-size-xs);
+  color: var(--bds-color-text-muted);
+}
