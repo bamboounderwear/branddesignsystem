@@ -123,7 +123,11 @@ export default {
 };
 
 function renderComponentList(components) {
-  if (!components.length) return "";
+  if (!components.length) {
+    return `<div class="alert alert-info" role="status">
+      No components found yet. Add HTML fragments under <code>public/components/</code> to see them listed here.
+    </div>`;
+  }
 
   const links = components
     .sort((a, b) => a.title.localeCompare(b.title))
