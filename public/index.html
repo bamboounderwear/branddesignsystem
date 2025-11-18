@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Design System – Directory</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: #1f2937;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.05), transparent 25%),
+        radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.08), transparent 20%),
+        var(--bg);
+      color: var(--text);
+      padding: 2.5rem clamp(1.5rem, 3vw, 3rem);
+      line-height: 1.6;
+    }
+
+    header {
+      max-width: 720px;
+      margin: 0 auto 2rem auto;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 3vw, 2.75rem);
+      letter-spacing: -0.02em;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      transition: transform 150ms ease, border-color 150ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .card h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 0.75rem;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+    }
+
+    ul.directory {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    ul.directory > li {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .path {
+      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .children {
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .children li {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 0.95rem;
+    }
+
+    .folder, .file {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--text);
+      padding: 0.25rem 0.45rem;
+      border-radius: 8px;
+      transition: background 120ms ease;
+    }
+
+    .folder:hover, .file:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .folder::before {
+      content: "\1F4C1";
+    }
+
+    .file::before {
+      content: "\1F4C4";
+    }
+
+    small {
+      color: var(--muted);
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 2rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Brand Design System Explorer</h1>
+    <p class="lead">Browse the published folders and open any template, experience, or asset directly.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2><span class="badge">tokens/</span> Design tokens</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/tokens/</span>
+          <ul class="children">
+            <li><a class="file" href="/tokens/tokens.css">tokens.css</a></li>
+          </ul>
+          <small>Core color, spacing, and typography variables.</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><span class="badge">elements/</span> Elements</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/elements/</span>
+          <ul class="children">
+            <li><a class="file" href="/elements/elements.css">elements.css</a></li>
+          </ul>
+          <small>Foundational UI pieces built from tokens.</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><span class="badge">blocks/</span> Blocks</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/blocks/</span>
+          <ul class="children">
+            <li><a class="file" href="/blocks/blocks.css">blocks.css</a></li>
+          </ul>
+          <small>Composed content blocks that stack the elements.</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><span class="badge">templates/</span> Templates</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/templates/</span>
+          <ul class="children">
+            <li><a class="file" href="/templates/templates.css">templates.css</a></li>
+            <li><a class="file" href="/templates/slide-template-01-hero.html">slide-template-01-hero.html</a></li>
+            <li><a class="file" href="/templates/slide-template-02-stats.html">slide-template-02-stats.html</a></li>
+            <li><a class="file" href="/templates/slide-template-03-pillars.html">slide-template-03-pillars.html</a></li>
+            <li><a class="file" href="/templates/email-template-01-launch.html">email-template-01-launch.html</a></li>
+            <li><a class="file" href="/templates/email-template-02-features.html">email-template-02-features.html</a></li>
+            <li><a class="file" href="/templates/email-template-03-nurture.html">email-template-03-nurture.html</a></li>
+          </ul>
+          <small>Presentation-ready layouts for slides and emails.</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><span class="badge">experiences/</span> Experiences</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/experiences/slide-deck/</span>
+          <ul class="children">
+            <li><a class="file" href="/experiences/slide-deck/slide-01-overview.html">slide-01-overview.html</a></li>
+            <li><a class="file" href="/experiences/slide-deck/slide-02-impact.html">slide-02-impact.html</a></li>
+            <li><a class="file" href="/experiences/slide-deck/slide-03-pillars.html">slide-03-pillars.html</a></li>
+          </ul>
+        </li>
+        <li>
+          <span class="path">public/experiences/email-campaign/</span>
+          <ul class="children">
+            <li><a class="file" href="/experiences/email-campaign/email-01-launch.html">email-01-launch.html</a></li>
+            <li><a class="file" href="/experiences/email-campaign/email-02-how-to-use.html">email-02-how-to-use.html</a></li>
+            <li><a class="file" href="/experiences/email-campaign/email-03-next-steps.html">email-03-next-steps.html</a></li>
+          </ul>
+          <small>Ready-to-use experiences built from the templates.</small>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2><span class="badge">assets/</span> Assets</h2>
+      <ul class="directory">
+        <li>
+          <span class="path">public/assets/</span>
+          <ul class="children">
+            <li><a class="file" href="/assets/logo.svg">logo.svg</a></li>
+          </ul>
+          <small>Shared logo SVG placeholder.</small>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
