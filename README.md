@@ -1,4 +1,4 @@
-# Brand Design System (BDS) 
+# Brand Design System (BDS)
 
 Sequence: **Tokens → Elements → Blocks → Templates → Experiences**
 
