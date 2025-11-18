@@ -1,5 +1,5 @@
 # Brand Design System (BDS)
-
+ 
 Sequence: **Tokens → Elements → Blocks → Templates → Experiences**
 
 This repo shows a minimal, HTML-first implementation of the BDS model,
