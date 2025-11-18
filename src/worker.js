@@ -159,17 +159,42 @@ function injectComponentList(fragment, listHtml) {
   return `${fragment}\n${listHtml}`;
 }
 
+function renderMissingFragment(route, status = 404) {
+  const message = `Unable to load <code>${route.file}</code>. Make sure it exists in <code>public</code> and rerun <code>wrangler dev</code>.`;
+  const body = `
+    <main class="container py-5">
+      <div class="alert alert-danger" role="alert">
+        <h1 class="h4 mb-3">Component not found</h1>
+        <p class="mb-0">${message}</p>
+      </div>
+    </main>`;
+
+  return new Response(renderHtml({ title: "Component not found", body }), {
+    status,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
+}
+
 async function serveComponent({ route, request, env, components }) {
   // Fetch the component HTML fragment from static assets
   const assetUrl = new URL(route.file, request.url);
   const assetRequest = new Request(assetUrl.toString(), request);
-  const assetResponse = await env.ASSETS.fetch(assetRequest);
+  let fragment;
 
-  if (!assetResponse.ok) {
-    return null;
+  try {
+    const assetResponse = await env.ASSETS.fetch(assetRequest);
+
+    if (!assetResponse.ok) {
+      return renderMissingFragment(route, assetResponse.status);
+    }
+
+    fragment = await assetResponse.text();
+  } catch (error) {
+    console.error("Failed to fetch component fragment", error);
+    return renderMissingFragment(route);
   }
-
-  let fragment = await assetResponse.text();
 
   if (route.slug === "index") {
     const componentList = components.filter((component) => component.slug !== "index");
