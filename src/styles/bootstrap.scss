@@ -1,95 +1,179 @@
 // src/styles/bootstrap.scss
-// Bootstrap 5 entrypoint compiled locally. This file lists the core SCSS
-// variables we may want to override. Leave them commented out until you're
-// ready to activate them so we can keep upstream defaults while making all
-// touch points visible.
+// Bootstrap 5 entrypoint compiled locally. Define brand tokens here so SCSS
+// overrides stay versioned and discoverable alongside the build.
 
 // ---------------------------------------------------------------------------
-// COLOR SYSTEM
+// BRAND TOKENS (SCSS)
+// Update these values to re-theme Bootstrap. We also emit matching CSS
+// variables so non-SCSS consumers can read them at runtime.
 // ---------------------------------------------------------------------------
-// $primary: #ff6e2b;             // var(--bds-primary)
-// $secondary: #0f172a;           // var(--bds-secondary)
-// $success: #10b981;             // var(--bds-success)
-// $info: #3b82f6;                // var(--bds-info)
-// $warning: #f59e0b;             // var(--bds-warning)
-// $danger: #ef4444;              // var(--bds-danger)
-// $light: #f8fafc;               // var(--bds-light)
-// $dark: #1e293b;                // var(--bds-dark)
-// $body-bg: #f5f7fb;             // var(--bds-body-bg)
-// $body-color: #111827;          // var(--bds-body-color)
-// $link-color: #ff6e2b;          // var(--bds-primary)
-// $link-hover-color: #ff6b3d;    // var(--bds-accent)
+$bds-primary: #ff6e2b;
+$bds-primary-rgb: 255, 110, 43;
+$bds-secondary: #0f172a;
+$bds-secondary-rgb: 15, 23, 42;
+$bds-accent: #ff6b3d;
+$bds-accent-rgb: 255, 107, 61;
+
+$bds-success: #10b981;
+$bds-success-rgb: 16, 185, 129;
+$bds-info: #3b82f6;
+$bds-info-rgb: 59, 130, 246;
+$bds-warning: #f59e0b;
+$bds-warning-rgb: 245, 158, 11;
+$bds-danger: #ef4444;
+$bds-danger-rgb: 239, 68, 68;
+$bds-light: #f8fafc;
+$bds-light-rgb: 248, 250, 252;
+$bds-dark: #1e293b;
+$bds-dark-rgb: 30, 41, 59;
+
+$bds-body-bg: #f5f7fb;
+$bds-body-bg-rgb: 245, 247, 251;
+$bds-body-color: #111827;
+$bds-body-color-rgb: 17, 24, 39;
+$bds-surface-bg: #ffffff;
+$bds-surface-bg-rgb: 255, 255, 255;
+$bds-border-color: #cbd5e1;
+$bds-border-color-rgb: 203, 213, 225;
+
+$bds-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$bds-font-heading: $bds-font-sans;
+$bds-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+$bds-font-base: 1rem;
+$bds-line-height: 1.5;
+
+$bds-radius-sm: 0.375rem;
+$bds-radius-base: 0.75rem;
+$bds-radius-lg: 1rem;
+$bds-radius-pill: 50rem;
+
+$bds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$bds-shadow-base: 0 10px 30px -10px rgba(15, 23, 42, 0.12);
+$bds-focus-opacity: 0.25;
+
+// Keep a :root block for downstream consumers that rely on CSS variables.
+:root {
+  --bds-primary: #{$bds-primary};
+  --bds-primary-rgb: #{$bds-primary-rgb};
+  --bds-secondary: #{$bds-secondary};
+  --bds-secondary-rgb: #{$bds-secondary-rgb};
+  --bds-accent: #{$bds-accent};
+  --bds-accent-rgb: #{$bds-accent-rgb};
+
+  --bds-success: #{$bds-success};
+  --bds-success-rgb: #{$bds-success-rgb};
+  --bds-info: #{$bds-info};
+  --bds-info-rgb: #{$bds-info-rgb};
+  --bds-warning: #{$bds-warning};
+  --bds-warning-rgb: #{$bds-warning-rgb};
+  --bds-danger: #{$bds-danger};
+  --bds-danger-rgb: #{$bds-danger-rgb};
+  --bds-light: #{$bds-light};
+  --bds-light-rgb: #{$bds-light-rgb};
+  --bds-dark: #{$bds-dark};
+  --bds-dark-rgb: #{$bds-dark-rgb};
+
+  --bds-body-bg: #{$bds-body-bg};
+  --bds-body-bg-rgb: #{$bds-body-bg-rgb};
+  --bds-body-color: #{$bds-body-color};
+  --bds-body-color-rgb: #{$bds-body-color-rgb};
+  --bds-surface-bg: #{$bds-surface-bg};
+  --bds-surface-bg-rgb: #{$bds-surface-bg-rgb};
+  --bds-border-color: #{$bds-border-color};
+  --bds-border-color-rgb: #{$bds-border-color-rgb};
+
+  --bds-font-sans: #{$bds-font-sans};
+  --bds-font-heading: #{$bds-font-heading};
+  --bds-font-mono: #{$bds-font-mono};
+  --bds-font-base: #{$bds-font-base};
+  --bds-line-height: #{$bds-line-height};
+
+  --bds-radius-sm: #{$bds-radius-sm};
+  --bds-radius-base: #{$bds-radius-base};
+  --bds-radius-lg: #{$bds-radius-lg};
+  --bds-radius-pill: #{$bds-radius-pill};
+
+  --bds-shadow-sm: #{$bds-shadow-sm};
+  --bds-shadow-base: #{$bds-shadow-base};
+  --bds-focus-opacity: #{$bds-focus-opacity};
+}
 
 // ---------------------------------------------------------------------------
-// TYPOGRAPHY
+// BOOTSTRAP VARIABLE OVERRIDES (ACTIVE)
+// These mirror the token values above so Bootstrap ships pre-themed without
+// requiring a separate CSS token file.
 // ---------------------------------------------------------------------------
-// $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-// $font-family-base: $font-family-sans-serif;
-// $headings-font-family: $font-family-sans-serif;
-// $font-size-base: 1rem;         // var(--bds-font-base)
-// $line-height-base: 1.5;        // var(--bds-line-height)
-// $headings-font-weight: 700;
-// $headings-line-height: 1.2;
+$primary: $bds-primary;
+$secondary: $bds-secondary;
+$success: $bds-success;
+$info: $bds-info;
+$warning: $bds-warning;
+$danger: $bds-danger;
+$light: $bds-light;
+$dark: $bds-dark;
+$body-bg: $bds-body-bg;
+$body-color: $bds-body-color;
+$link-color: $bds-primary;
+$link-hover-color: $bds-accent;
 
-// ---------------------------------------------------------------------------
-// BORDERS & RADII
-// ---------------------------------------------------------------------------
-// $border-color: #cbd5e1;        // var(--bds-border-color)
-// $border-radius-sm: 0.375rem;   // var(--bds-radius-sm)
-// $border-radius: 0.75rem;       // var(--bds-radius-base)
-// $border-radius-lg: 1rem;       // var(--bds-radius-lg)
-// $border-radius-pill: 50rem;    // var(--bds-radius-pill)
+$font-family-sans-serif: $bds-font-sans;
+$font-family-base: $font-family-sans-serif;
+$headings-font-family: $bds-font-heading;
+$font-size-base: $bds-font-base;
+$line-height-base: $bds-line-height;
+$headings-font-weight: 700;
+$headings-line-height: 1.2;
 
-// ---------------------------------------------------------------------------
-// SHADOWS
-// ---------------------------------------------------------------------------
-// $box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);           // var(--bds-shadow-sm)
-// $box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12);   // var(--bds-shadow-base)
+$border-color: $bds-border-color;
+$border-radius-sm: $bds-radius-sm;
+$border-radius: $bds-radius-base;
+$border-radius-lg: $bds-radius-lg;
+$border-radius-pill: $bds-radius-pill;
 
-// ---------------------------------------------------------------------------
-// COMPONENTS
-// ---------------------------------------------------------------------------
+$box-shadow-sm: $bds-shadow-sm;
+$box-shadow: $bds-shadow-base;
+
 // Cards
-// $card-bg: #ffffff;                     // var(--bds-surface-bg)
-// $card-border-width: 0;
-// $card-border-color: $border-color;
-// $card-border-radius: $border-radius-lg;
-// $card-box-shadow: $box-shadow;
+$card-bg: $bds-surface-bg;
+$card-border-width: 0;
+$card-border-color: $border-color;
+$card-border-radius: $border-radius-lg;
+$card-box-shadow: $box-shadow;
 
 // Forms
-// $input-bg: #ffffff;                    // var(--bds-surface-bg)
-// $input-border-color: #cbd5e1;          // var(--bds-border-color)
-// $input-border-radius: $border-radius;
-// $input-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25); // rgba(var(--bds-primary-rgb), var(--bds-focus-opacity))
+$input-bg: $bds-surface-bg;
+$input-border-color: $bds-border-color;
+$input-border-radius: $border-radius;
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($bds-primary, $bds-focus-opacity);
 
 // Buttons
-// $btn-border-radius: $border-radius;
-// $btn-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25);
+$btn-border-radius: $border-radius;
+$btn-focus-box-shadow: 0 0 0 0.25rem rgba($bds-primary, $bds-focus-opacity);
 
 // Dropdowns
-// $dropdown-bg: #ffffff;
-// $dropdown-border-radius: $border-radius;
-// $dropdown-box-shadow: $box-shadow;
-// $dropdown-link-active-bg: #ff6e2b;
+$dropdown-bg: $bds-surface-bg;
+$dropdown-border-radius: $border-radius;
+$dropdown-box-shadow: $box-shadow;
+$dropdown-link-active-bg: $bds-primary;
 
 // Accordion
-// $accordion-bg: #ffffff;
-// $accordion-button-active-color: #ff6e2b;
-// $accordion-button-active-bg: rgba(255, 110, 43, 0.1);
-// $accordion-button-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25);
+$accordion-bg: $bds-surface-bg;
+$accordion-button-active-color: $bds-primary;
+$accordion-button-active-bg: rgba($bds-primary, 0.1);
+$accordion-button-focus-box-shadow: 0 0 0 0.25rem rgba($bds-primary, $bds-focus-opacity);
 
 // Tables
-// $table-bg: transparent;
-// $table-border-color: $border-color;
+$table-bg: transparent;
+$table-border-color: $border-color;
 
 // Modals
-// $modal-content-bg: #ffffff;
-// $modal-content-border-radius: $border-radius-lg;
-// $modal-header-border-color: $border-color;
+$modal-content-bg: $bds-surface-bg;
+$modal-content-border-radius: $border-radius-lg;
+$modal-header-border-color: $border-color;
 
 // Toasts
-// $toast-background-color: rgba(248, 250, 252, 0.85);
-// $toast-header-background-color: rgba(248, 250, 252, 0.95);
+$toast-background-color: rgba($bds-surface-bg, 0.85);
+$toast-header-background-color: rgba($bds-surface-bg, 0.95);
 
 // ---------------------------------------------------------------------------
 // ENTRYPOINT

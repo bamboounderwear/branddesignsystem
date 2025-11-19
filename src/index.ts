@@ -80,7 +80,6 @@ function renderHtml({ title, body }: { title: string; body: string }): string {
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>${title}</title>
 <link rel="stylesheet" href="/bootstrap.css"/>
-<link rel="stylesheet" href="/brand-tokens.css"/>
 </head>
 <body class="container my-4">
 ${body}
