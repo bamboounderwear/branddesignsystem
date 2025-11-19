@@ -1,0 +1,23 @@
+{
+  "name": "branddesignsystem",
+  "version": "1.0.0",
+  "description": "Bootstrap theming sandbox for BDS tokens and Cloudflare Workers shell.",
+  "type": "module",
+  "scripts": {
+    "build:css": "sass src/styles/bootstrap.scss public/bootstrap.css --style=expanded --no-source-map",
+    "build": "npm run build:css"
+  },
+  "keywords": [
+    "bootstrap",
+    "design-system",
+    "cloudflare-workers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  },
+  "devDependencies": {
+    "sass": "^1.77.6"
+  }
+}

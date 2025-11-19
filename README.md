@@ -1,17 +1,16 @@
 # BDS Bootstrap Tokens – Cloudflare Workers Example
 
 This project shows how to:
-- Use **Bootstrap 5** for layout and components
-- Put all brand styling in **`brand-tokens.css`**
+- Use **Bootstrap 5** for layout and components (compiled from SCSS)
+- Put all brand styling in a single **`src/styles/bootstrap.scss`** entrypoint
 - Let a **Cloudflare Worker** inject `<head>`, `<body>`, and a shared navbar
   around HTML component fragments.
 
 ## Structure
 
 - `wrangler.jsonc` – Cloudflare Workers config.
-- `src/worker.js` – Module Worker that wraps fragments with the full HTML shell (head + body) but does NOT inject any navbar or layout container.
-- `public/brand-tokens.css` – Brand tokens + Bootstrap variable mapping.
-  - Non-coders only edit the `:root` BDS token values at the top.
+- `src/index.ts` – Module Worker that wraps fragments with the full HTML shell (head + body) but does NOT inject any navbar or layout container.
+- `src/styles/bootstrap.scss` – Bootstrap entrypoint with brand token defaults and overrides you can tweak before compiling to CSS.
 - `public/components/*.html` – Content-only HTML fragments (no `<html>`, `<head>`, `<body>`):
   - `index.html`
   - `slide-typography.html`
@@ -21,16 +20,19 @@ This project shows how to:
 
 - When you hit `/`, `/slide-typography`, or `/email-campaign`:
   - The Worker reads the matching fragment from `public/components/`.
-  - It wraps that fragment in a shared layout (doctype, head with Bootstrap CDN,
-    `brand-tokens.css`, navbar, `<main class="container my-5">...</main>`).
-- Requests for anything else (like `/brand-tokens.css`) are served directly
-  from the `public/` directory via the `ASSETS` binding.
+  - It wraps that fragment in a shared layout (doctype, head with compiled `bootstrap.css`,
+    navbar, `<main class="container my-5">...</main>`).
+- Requests for anything else are served directly from the `public/` directory via the `ASSETS` binding.
 
 ## Usage
 
 ```bash
 # Install wrangler if needed
 npm install -g wrangler
+
+# Install dependencies and build Bootstrap from SCSS
+npm install
+npm run build:css
 
 # Preview locally
 wrangler dev
@@ -50,7 +52,7 @@ The index page automatically lists every component fragment it discovers in
 
 To rebrand everything:
 
-- Edit the token values in `public/brand-tokens.css` under the `/* BDS TOKENS */` section.
+- Edit the token values in `src/styles/bootstrap.scss`, then re-run `npm run build:css`.
 - All pages and layouts will inherit the new styling automatically.
 
 Note:

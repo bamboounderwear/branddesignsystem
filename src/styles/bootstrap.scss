@@ -1,0 +1,150 @@
+/*
+ * Bootstrap SCSS entrypoint for BDS theming.
+ *
+ * Edit the brand tokens below, then run `npm run build:css` to regenerate
+ * public/bootstrap.css. The Sass variables override Bootstrap defaults while
+ * also emitting CSS custom properties you can reference in custom components.
+ */
+
+// --- Brand token defaults ---
+$brand-primary: #ff6e2b;
+$brand-secondary: #0f172a;
+$brand-accent: #ff6b3d;
+$brand-success: #10b981;
+$brand-info: #3b82f6;
+$brand-warning: #f59e0b;
+$brand-danger: #ef4444;
+$brand-light: #f8fafc;
+$brand-dark: #1e293b;
+
+$brand-body-bg: #f5f7fb;
+$brand-body-color: #111827;
+$brand-surface-bg: #ffffff;
+$brand-border-color: #cbd5e1;
+
+$brand-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$brand-font-mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+
+$brand-radius-sm: 0.375rem;
+$brand-radius: 0.75rem;
+$brand-radius-lg: 1rem;
+$brand-radius-pill: 50rem;
+
+$brand-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$brand-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12);
+
+$brand-focus-opacity: 0.25;
+
+// --- Bootstrap variable overrides ---
+$primary: $brand-primary;
+$secondary: $brand-secondary;
+$success: $brand-success;
+$info: $brand-info;
+$warning: $brand-warning;
+$danger: $brand-danger;
+$light: $brand-light;
+$dark: $brand-dark;
+
+$body-bg: $brand-body-bg;
+$body-color: $brand-body-color;
+
+$font-family-sans-serif: $brand-font-sans;
+$font-family-monospace: $brand-font-mono;
+$headings-font-family: $brand-font-sans;
+$headings-color: $brand-primary;
+
+$link-color: $brand-primary;
+$link-hover-color: $brand-accent;
+$link-decoration: none;
+
+$border-color: $brand-border-color;
+$border-radius: $brand-radius;
+$border-radius-sm: $brand-radius-sm;
+$border-radius-lg: $brand-radius-lg;
+$border-radius-pill: $brand-radius-pill;
+
+$box-shadow-sm: $brand-shadow-sm;
+$box-shadow: $brand-shadow;
+
+$focus-ring-opacity: $brand-focus-opacity;
+$focus-ring-color: rgba($primary, $focus-ring-opacity);
+
+$card-bg: $brand-surface-bg;
+$card-border-width: 0;
+$card-border-radius: $brand-radius-lg;
+$card-box-shadow: $box-shadow;
+
+$btn-border-radius: $brand-radius;
+
+$input-bg: $brand-surface-bg;
+$input-border-color: $brand-border-color;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($primary, $brand-focus-opacity);
+
+$dropdown-bg: $brand-surface-bg;
+$dropdown-border-radius: $brand-radius;
+$dropdown-border-color: $brand-border-color;
+$dropdown-link-active-bg: $primary;
+$dropdown-box-shadow: $box-shadow;
+
+$accordion-bg: $brand-surface-bg;
+$accordion-button-active-bg: rgba($primary, 0.1);
+$accordion-button-active-color: $primary;
+$accordion-button-focus-box-shadow: 0 0 0 0.25rem rgba($primary, $brand-focus-opacity);
+
+$table-border-color: $brand-border-color;
+
+$modal-content-bg: $brand-surface-bg;
+$modal-content-border-color: $brand-border-color;
+$modal-content-border-radius: $brand-radius-lg;
+
+$toast-background-color: rgba(255, 255, 255, 0.85);
+$toast-header-background-color: rgba(255, 255, 255, 0.95);
+
+// --- Optional: expose tokens as CSS custom properties for app-specific use ---
+:root {
+  --bds-primary: #{$brand-primary};
+  --bds-primary-rgb: #{red($brand-primary)}, #{green($brand-primary)}, #{blue($brand-primary)};
+  --bds-secondary: #{$brand-secondary};
+  --bds-secondary-rgb: #{red($brand-secondary)}, #{green($brand-secondary)}, #{blue($brand-secondary)};
+  --bds-accent: #{$brand-accent};
+  --bds-accent-rgb: #{red($brand-accent)}, #{green($brand-accent)}, #{blue($brand-accent)};
+  --bds-success: #{$brand-success};
+  --bds-success-rgb: #{red($brand-success)}, #{green($brand-success)}, #{blue($brand-success)};
+  --bds-info: #{$brand-info};
+  --bds-info-rgb: #{red($brand-info)}, #{green($brand-info)}, #{blue($brand-info)};
+  --bds-warning: #{$brand-warning};
+  --bds-warning-rgb: #{red($brand-warning)}, #{green($brand-warning)}, #{blue($brand-warning)};
+  --bds-danger: #{$brand-danger};
+  --bds-danger-rgb: #{red($brand-danger)}, #{green($brand-danger)}, #{blue($brand-danger)};
+  --bds-light: #{$brand-light};
+  --bds-light-rgb: #{red($brand-light)}, #{green($brand-light)}, #{blue($brand-light)};
+  --bds-dark: #{$brand-dark};
+  --bds-dark-rgb: #{red($brand-dark)}, #{green($brand-dark)}, #{blue($brand-dark)};
+
+  --bds-body-bg: #{$brand-body-bg};
+  --bds-body-bg-rgb: #{red($brand-body-bg)}, #{green($brand-body-bg)}, #{blue($brand-body-bg)};
+  --bds-body-color: #{$brand-body-color};
+  --bds-body-color-rgb: #{red($brand-body-color)}, #{green($brand-body-color)}, #{blue($brand-body-color)};
+  --bds-surface-bg: #{$brand-surface-bg};
+  --bds-surface-bg-rgb: #{red($brand-surface-bg)}, #{green($brand-surface-bg)}, #{blue($brand-surface-bg)};
+  --bds-border-color: #{$brand-border-color};
+  --bds-border-color-rgb: #{red($brand-border-color)}, #{green($brand-border-color)}, #{blue($brand-border-color)};
+
+  --bds-font-sans: #{$brand-font-sans};
+  --bds-font-heading: #{$brand-font-sans};
+  --bds-font-mono: #{$brand-font-mono};
+  --bds-font-base: 1rem;
+  --bds-line-height: 1.5;
+
+  --bds-radius-sm: #{$brand-radius-sm};
+  --bds-radius-base: #{$brand-radius};
+  --bds-radius-lg: #{$brand-radius-lg};
+  --bds-radius-pill: #{$brand-radius-pill};
+
+  --bds-shadow-sm: #{$brand-shadow-sm};
+  --bds-shadow-base: #{$brand-shadow};
+  --bds-focus-opacity: #{$brand-focus-opacity};
+}
+
+@import "bootstrap/scss/bootstrap";
