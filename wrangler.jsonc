@@ -1,10 +1,17 @@
 // wrangler.jsonc
 {
   "name": "bds-bootstrap-workers",
-  "main": "src/worker.js",
-  "compatibility_date": "2025-01-15",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-07",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./public"
-  }
+    "directory": "public"
+  },
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+
+  // For production routing (uncomment and set your zone):
+  // "routes": [
+  //   { "pattern": "brand.example.com/*", "zone_name": "example.com" }
+  // ]
 }
