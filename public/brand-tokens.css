@@ -9,7 +9,7 @@
    * ------------------------------------------------------------------ */
   /* Primary Brand Color */
   --bds-primary:             #ff6e2b;
-  --bds-primary-rgb:         43, 92, 255; /* NO parenthesis, just numbers */
+  --bds-primary-rgb:         255, 110, 43; /* NO parenthesis, just numbers */
 
   /* Secondary / Surface Dark */
   --bds-secondary:           #0f172a;
