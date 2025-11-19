@@ -1,0 +1,97 @@
+// src/styles/bootstrap.scss
+// Bootstrap 5 entrypoint compiled locally. This file lists the core SCSS
+// variables we may want to override. Leave them commented out until you're
+// ready to activate them so we can keep upstream defaults while making all
+// touch points visible.
+
+// ---------------------------------------------------------------------------
+// COLOR SYSTEM
+// ---------------------------------------------------------------------------
+// $primary: #ff6e2b;             // var(--bds-primary)
+// $secondary: #0f172a;           // var(--bds-secondary)
+// $success: #10b981;             // var(--bds-success)
+// $info: #3b82f6;                // var(--bds-info)
+// $warning: #f59e0b;             // var(--bds-warning)
+// $danger: #ef4444;              // var(--bds-danger)
+// $light: #f8fafc;               // var(--bds-light)
+// $dark: #1e293b;                // var(--bds-dark)
+// $body-bg: #f5f7fb;             // var(--bds-body-bg)
+// $body-color: #111827;          // var(--bds-body-color)
+// $link-color: #ff6e2b;          // var(--bds-primary)
+// $link-hover-color: #ff6b3d;    // var(--bds-accent)
+
+// ---------------------------------------------------------------------------
+// TYPOGRAPHY
+// ---------------------------------------------------------------------------
+// $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+// $font-family-base: $font-family-sans-serif;
+// $headings-font-family: $font-family-sans-serif;
+// $font-size-base: 1rem;         // var(--bds-font-base)
+// $line-height-base: 1.5;        // var(--bds-line-height)
+// $headings-font-weight: 700;
+// $headings-line-height: 1.2;
+
+// ---------------------------------------------------------------------------
+// BORDERS & RADII
+// ---------------------------------------------------------------------------
+// $border-color: #cbd5e1;        // var(--bds-border-color)
+// $border-radius-sm: 0.375rem;   // var(--bds-radius-sm)
+// $border-radius: 0.75rem;       // var(--bds-radius-base)
+// $border-radius-lg: 1rem;       // var(--bds-radius-lg)
+// $border-radius-pill: 50rem;    // var(--bds-radius-pill)
+
+// ---------------------------------------------------------------------------
+// SHADOWS
+// ---------------------------------------------------------------------------
+// $box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);           // var(--bds-shadow-sm)
+// $box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12);   // var(--bds-shadow-base)
+
+// ---------------------------------------------------------------------------
+// COMPONENTS
+// ---------------------------------------------------------------------------
+// Cards
+// $card-bg: #ffffff;                     // var(--bds-surface-bg)
+// $card-border-width: 0;
+// $card-border-color: $border-color;
+// $card-border-radius: $border-radius-lg;
+// $card-box-shadow: $box-shadow;
+
+// Forms
+// $input-bg: #ffffff;                    // var(--bds-surface-bg)
+// $input-border-color: #cbd5e1;          // var(--bds-border-color)
+// $input-border-radius: $border-radius;
+// $input-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25); // rgba(var(--bds-primary-rgb), var(--bds-focus-opacity))
+
+// Buttons
+// $btn-border-radius: $border-radius;
+// $btn-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25);
+
+// Dropdowns
+// $dropdown-bg: #ffffff;
+// $dropdown-border-radius: $border-radius;
+// $dropdown-box-shadow: $box-shadow;
+// $dropdown-link-active-bg: #ff6e2b;
+
+// Accordion
+// $accordion-bg: #ffffff;
+// $accordion-button-active-color: #ff6e2b;
+// $accordion-button-active-bg: rgba(255, 110, 43, 0.1);
+// $accordion-button-focus-box-shadow: 0 0 0 0.25rem rgba(255, 110, 43, 0.25);
+
+// Tables
+// $table-bg: transparent;
+// $table-border-color: $border-color;
+
+// Modals
+// $modal-content-bg: #ffffff;
+// $modal-content-border-radius: $border-radius-lg;
+// $modal-header-border-color: $border-color;
+
+// Toasts
+// $toast-background-color: rgba(248, 250, 252, 0.85);
+// $toast-header-background-color: rgba(248, 250, 252, 0.95);
+
+// ---------------------------------------------------------------------------
+// ENTRYPOINT
+// ---------------------------------------------------------------------------
+@import "bootstrap/scss/bootstrap";
