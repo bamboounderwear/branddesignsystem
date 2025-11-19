@@ -23,7 +23,9 @@ function discoverComponents(env) {
         slug,
         path: slug === "index" ? "/" : `/${slug}`,
         title: slug === "index" ? "BDS Bootstrap Tokens – Overview" : slugToTitle(slug),
-        file: `/${file}`,
+        // Always point to the canonical public path so we don't depend on
+        // hashed asset names inside the manifest when serving the file.
+        file: `/components/${slug}.html`,
       };
     })
     .sort((a, b) => a.title.localeCompare(b.title));
