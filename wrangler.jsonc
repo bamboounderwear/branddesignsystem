@@ -8,10 +8,11 @@
     "binding": "ASSETS",
     "directory": "public"
   },
+  "build": {
+    "command": "node tools/generate-index.mjs"
+  },
   "observability": { "enabled": true, "head_sampling_rate": 1 }
 
-  // For production routing (uncomment and set your zone):
-  // "routes": [
-  //   { "pattern": "brand.example.com/*", "zone_name": "example.com" }
-  // ]
+  // Optional prod routes:
+  // "routes": [{ "pattern": "brand.example.com/*", "zone_name": "example.com" }]
 }
