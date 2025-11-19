@@ -1,0 +1,16 @@
+{
+  "name": "branddesignsystem",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:css && node tools/generate-index.mjs",
+    "build:css": "sass --load-path=node_modules src/styles/bootstrap.scss public/bootstrap.css --style=expanded --no-source-map"
+  },
+  "dependencies": {
+    "bootstrap": "5.3.3"
+  },
+  "devDependencies": {
+    "sass": "1.76.0"
+  }
+}

@@ -3,7 +3,7 @@
   <div class="col-md-7 mb-4 mb-md-0">
     <h1 class="display-4 mb-3">Brand Design System, powered by tokens.</h1>
     <p class="lead mb-4">
-      Change a few values in <code>brand-tokens.css</code> and your slide decks,
+      Update the tokens in <code>src/styles/bootstrap.scss</code> and your slide decks,
       landing pages, and email layouts update automatically.
     </p>
     <div class="d-flex gap-3">
@@ -17,7 +17,7 @@
         <h2 class="h5 mb-3">How it works</h2>
         <ol class="mb-0">
           <li class="mb-1">Bootstrap handles layout and basic components.</li>
-          <li class="mb-1">Tokens in <code>brand-tokens.css</code> theme Bootstrap.</li>
+          <li class="mb-1">Tokens in <code>src/styles/bootstrap.scss</code> theme Bootstrap.</li>
           <li class="mb-1">LLMs output HTML using only Bootstrap classes.</li>
         </ol>
       </div>
@@ -31,8 +31,8 @@
       <div class="card-body">
         <h3 class="h5">Tokens</h3>
         <p class="mb-0">
-          Colors, radii, typography, and shadows defined with CSS variables.
-          Non-coders only edit this single file.
+          Colors, radii, typography, and shadows defined in SCSS (and emitted as
+          CSS variables) so designers and developers edit the same source.
         </p>
       </div>
     </div>
