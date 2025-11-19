@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:css && node tools/generate-index.mjs",
-    "build:css": "sass src/styles/bootstrap.scss public/bootstrap.css --style=expanded --no-source-map"
+    "build:css": "sass --load-path=node_modules src/styles/bootstrap.scss public/bootstrap.css --style=expanded --no-source-map"
   },
   "dependencies": {
     "bootstrap": "5.3.3"

@@ -39,6 +39,9 @@ wrangler dev
 
 # Deploy to Cloudflare Workers
 wrangler publish
+
+# The SCSS build resolves Bootstrap from `node_modules`, so make sure
+# dependencies are installed before running `npm run build` or `wrangler dev`.
 ```
 
 To add a new page:
